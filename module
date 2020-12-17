@@ -1,0 +1,112 @@
+local UI = {}
+
+--[[ 
+					 <<Made by TheGreenGaming886>>
+ How to use the Module:-
+ 
+ make a Frame in your gui with size (1,0,1,0) and remove the opacity
+ make a local script there and in the local script
+ require the module and cann UI.ListVertical() function
+ UI.ListVertical(Frame,Clones,CreateDebounce,RemoveTime,Text,TextColor,Stroke,RichText,TextScaled,Font,TextSize,sound,soundid)
+ Frame is the frame the text labels will be in
+ Clones is how much texts will clone
+ <Max Clones are 7>
+ CreateDebounce is the cooldown for cloning the text label
+ RemoveTime is the time will the text leave the screen
+ Text is the text will be in label
+ TextColor is the text color
+ Stroke is if u want the text have stroke or no as (true or false)
+ RichText is if u want to enable the rich text or no as (true or false)
+ TextScaled is if u want to enable the TextScaled or no as (true or false)
+ Font is to change the font as u want
+ TextSize is to change the text size
+ Sound is for the Access to play a sound when it start or no as (true or false)
+ Soundid is when u accept the sound play access u must put the the soundid
+ 
+ Example:-
+ 	local UI = require(game.ReplicatedStorage.AnimatedUIListLayout)
+
+	UI.ListVertical(script.Parent,3,1.5,2,"Hi i am not here",Color3.fromRGB(255, 255, 127),true,false,true,"Michroma",14,false,nil)
+	UI.ListHorizontal(script.Parent,1,0.5,1,"Hi i am not here",Color3.fromRGB(255, 255, 127),true,false,true,"Merriweather",14,false,nil)
+
+	-- Do the same for the HorizontalList
+	-- U have the sound play option but its not must to put
+	if u want to add sound do like the example
+	
+	UI.ListHorizontal(script.Parent,1,0.5,1,"Hi i am not here",Color3.fromRGB(255, 255, 127),true,false,true,"Merriweather",14,true,"3295550249")
+--]]
+Times = 0
+
+function UI.ListVertical(Frame,Clones,CreateDebounce,RemoveTime,Text,TextColor,Stroke,RichText,TextScaled,Font,TextSize,sound,soundid)
+	if Frame == nil or Clones == nil or CreateDebounce == nil or RemoveTime == nil or Text == nil or TextColor == nil or Stroke == nil or RichText == nil or TextScaled == nil or Font == nil or TextSize == nil then
+		warn("You messed up something didn't add you should see the Instructions and check.")
+	elseif Frame ~= nil or Clones ~= nil or CreateDebounce ~= nil or RemoveTime ~= nil or Text ~= nil or TextColor ~= nil or Stroke ~= nil or RichText ~= nil or TextScaled ~= nil or Font ~= nil or TextSize ~= nil then
+		if Clones <= 7 then
+			Clones = Clones - 1
+			for i = 0,Clones,1 do
+				local Label = Instance.new("TextLabel",Frame)
+				Label.BackgroundTransparency = 1
+				Label.Size = UDim2.new(1,0,0.1,0)
+				Label.TextWrapped = true
+				Label.Position = UDim2.new(0,0,-0.5,0)
+				Label.Text = Text
+				Label.TextColor3 = TextColor
+				Label.Font = Font
+				Label.Name = "VerticalLabel"
+				Label.TextSize = TextSize
+				if Stroke ~= nil and Stroke == true then
+					Label.TextScaled = true
+				elseif Stroke == nil or Stroke == false then
+					Label.TextScaled = false
+				end
+				if RichText ~= nil and RichText == true then
+					Label.RichText = true
+				elseif RichText == nil or RichText == false then
+					Label.RichText = false
+				end
+				if TextScaled ~= nil and TextScaled == true then
+					Label.TextStrokeTransparency = 0
+				elseif TextScaled == nil or TextScaled == false then
+					Label.TextStrokeTransparency = 1
+				end
+				wait(CreateDebounce)
+				if sound ~= nil or sound == true then
+					local sound = Instance.new("Sound",Frame)
+					sound.SoundId = "rbxassetid://"..soundid
+					sound:Play()
+					Label:TweenPosition(UDim2.new(0, 0,Times, 0),Enum.EasingDirection.InOut,Enum.EasingStyle.Sine,0.5,true)
+					Times = Times + .139
+				elseif sound == nil or sound == false then
+					Label:TweenPosition(UDim2.new(0, 0,Times, 0),Enum.EasingDirection.InOut,Enum.EasingStyle.Sine,0.5,true)
+					Times = Times + .139
+				end
+
+				local v2 = false
+
+				wait(RemoveTime)
+				
+				if Frame:FindFirstChild("Sound") then
+					Frame:FindFirstChild("Sound"):Destroy()
+				end
+				
+				for _,v in pairs(Frame:GetChildren()) do
+					if v:IsA("TextLabel") and v ~= nil then
+						if v ~= nil and v2 == false then
+							v2 = true
+							v:TweenPosition(UDim2.new(0, 0,-0.5, 0),Enum.EasingDirection.InOut,Enum.EasingStyle.Sine,0.5,true)
+							v2 = false
+						end
+						if v.Position == UDim2.new(0, 0,-0.5, 0) then
+							v:Destroy()
+						end
+					end
+				end
+				Times = 0
+			end
+		else
+			warn("The VerticalUIListLayout will not work because the Max Number of Clones in (7) Please Change it to make the Module Work.")
+		end
+	end
+end
+
+return UI
